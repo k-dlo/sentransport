@@ -1,0 +1,8 @@
+.affich{
+    display: flex;
+    justify-content: space-around;
+    background-color: #f0f0f0;
+    padding: 15px, ;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
