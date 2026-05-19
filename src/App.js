@@ -64,12 +64,13 @@ function App() {
         <div className="App">
             <Header />
             <main className="contenu">
+
                 <Recherche valeur={recherche} onChange={setRecherche} />
                 
                 <p className="resultat-recherche">
                     {lignesFiltrees.length} ligne{lignesFiltrees.length > 1 ? 's' : ''} trouvee{lignesFiltrees.length > 1 ? 's' : ''}
                 </p>
-
+                
                 {lignesFiltrees.map(ligne => (
                     <LigneBus
                         key={ligne.id}
@@ -81,6 +82,13 @@ function App() {
                         onClick={() => handleClickLigne(ligne)}
                     />
                 ))}
+                
+                {lignesFiltrees.length === 0 && <p style={{ 
+                    width: "100%", 
+                    color: "#928383c3",
+                    textAlign: "center",
+                    padding: "30px 0"
+                }}>Aucune ligne trouvée</p>}
 
                 {ligneSelectionnee && <DetailLigne ligne={ligneSelectionnee} />}
             </main>
