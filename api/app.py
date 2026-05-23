@@ -13,7 +13,7 @@ with open("lignes_ddd.json", "r") as f:
 def accueil():
     return jsonify({
         "message": "Bienvenue sur l'API SenTransport !",
-        "endpoints": ["/lignes", "/lignes/<id>"]
+        "endpoints": ["/lignes", "/lignes/<id>", "/arrets", "/stats", "/lignes/recherche"]
     })
 
 @app.route("/lignes")
@@ -30,5 +30,46 @@ def get_ligne(ligne_id):
         return jsonify({"erreur": "Ligne non trouvee"}), 404
     return jsonify(ligne)
 
+# Exercice 1
+@app.route("/arrets")
+def get_arrets():
+    arrets_uniques = set(arret for ligne in lignes for arret in ligne["listeArrets"])
+    
+    liste_arrets = list(arrets_uniques)
+    
+    return jsonify(liste_arrets)
+
+# Exercice 2
+@app.route("/stats")
+def get_stats():
+    total_lignes = len(lignes)
+    
+    total_arrets = len(set(arret for ligne in lignes for arret in ligne["listeArrets"]))
+    
+    ligne_max = max(lignes, key=lambda l: l["arrets"])
+    numero_ligne_max = ligne_max["numero"]
+    
+    return jsonify({
+        "nbre total de lignes": total_lignes,
+        "nbre total d'arrets": total_arrets,
+        "ligne ayant le plus d'arrets": numero_ligne_max
+    })
+
+# Exercice 3
+from flask import request
+
+@app.route("/lignes/recherche")
+def recherche_lignes():
+    q = request.args.get("q", "").lower()
+    
+    lignes_filtrees = [
+        l for l in lignes 
+        if q in l["depart"].lower() or q in l["arrivee"].lower()
+    ]
+    
+    return jsonify(lignes_filtrees)
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
+
